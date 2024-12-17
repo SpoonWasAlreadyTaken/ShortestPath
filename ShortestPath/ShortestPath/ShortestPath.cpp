@@ -101,7 +101,7 @@ string ShortestPath(vector<int> startPositions, const int endPosition)
 
 	for (int i = 0; i < startPositions.size(); i++)
 	{
-		cPos.push_back({GetX(startPositions.at(i)), GetY(startPositions.at(i))});
+		cPos.push_back({GetY(startPositions.at(i)), GetX(startPositions.at(i))});
 	}
 
 
