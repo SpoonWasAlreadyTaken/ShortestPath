@@ -36,7 +36,7 @@ int main()
 		for (int j = 0; j < sizeY; j++)
 		{
 			grid.at(i).push_back('#');
-			costGrid.at(i).push_back(RandomNumber(0, 3));
+			costGrid.at(i).push_back(RandomNumber(0, 10));
 		}
 	}
 
@@ -69,6 +69,8 @@ int main()
 			endIndex = RandomNumber(0, sizeX * sizeY - 1);
 		}
 
+		cout << "target Position: " << GetX(endIndex) << ", " << GetY(endIndex) << "\n";
+
 		cout << ShortestPath(startIndex, endIndex);
 
 		cout << "\n" << "press anything to continue\n";
@@ -98,8 +100,6 @@ string ShortestPath(vector<int> startPositions, const int endPosition)
 
 	while (!reachedEnd)
 	{
-
-		
 		for (int i = 0; i < cPos.size(); i++)
 		{
 			cout << "posX: " << cPos.at(i).at(0) << " posY: " << cPos.at(i).at(1) << "\n";
@@ -113,80 +113,61 @@ string ShortestPath(vector<int> startPositions, const int endPosition)
 
 		for (int i = 0; i < cPos.size(); i++)
 		{
-			bool right;
-			bool moveX = false;
-			bool moveY = false;
-			bool up;
+			int moveX = 0;
+			int moveY = 0;
 
 			if (cPos.at(i).at(0) != GetX(endPosition))
 			{
 				if (cPos.at(i).at(0) < GetX(endPosition))
 				{
-					right = true;
+					moveX = 1;
 				}
 				else
 				{
-					right = false;
+					moveX = -1;
 				}
 			}
-
 			if (cPos.at(i).at(1) != GetY(endPosition))
 			{
 				if (cPos.at(i).at(1) < GetY(endPosition))
 				{
-					up = true;
+					moveY = 1;
 				}
 				else
 				{
-					up = false;
+					moveY = -1;
 				}
 			}
 
-			if (up && right)
+			
+			if (moveX != 0 && moveY != 0)
 			{
-				if (costGrid.at(cPos.at(i).at(0)).at(cPos.at(i).at(1) + 1) > costGrid.at(cPos.at(i).at(1)).at(cPos.at(i).at(0) + 1))
+				if (costGrid.at(cPos.at(i).at(1)).at(cPos.at(i).at(0) + moveX) == costGrid.at(cPos.at(i).at(0)).at(cPos.at(i).at(1) + moveY))
 				{
-
-				}
-				else
-			}
-			else if (up && !right)
-			{
-
-			}
-			else if (!up && right)
-			{
-
-			}
-			else if (!up && !right)
-			{
-
-			}
-
-
-			if (moveX)
-			{
-				if (right)
-				{
-					cPos.at(i).at(0)++;
+					if (abs(GetX(endPosition) - cPos.at(i).at(0)) < abs(GetY(endPosition) - cPos.at(i).at(1)))
+					{
+						moveX = 0;
+					}
+					else
+					{
+						moveY = 0;
+					}
 				}
 				else
 				{
-					cPos.at(i).at(0)--;
+					if (costGrid.at(cPos.at(i).at(1)).at(cPos.at(i).at(0) + moveX) > costGrid.at(cPos.at(i).at(0)).at(cPos.at(i).at(1) + moveY))
+					{
+						moveX = 0;
+					}
+					else
+					{
+						moveY = 0;
+					}
 				}
 			}
 			
-			if (moveY)
-			{
-				if (up)
-				{
-					cPos.at(i).at(1)++;
-				}
-				else
-				{
-					cPos.at(i).at(1)--;
-				}
-			}
+			cPos.at(i).at(0) += moveX;
+			cPos.at(i).at(1) += moveY;
 		}
 
 		reachedEnd = true;
