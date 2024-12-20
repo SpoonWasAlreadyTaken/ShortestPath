@@ -13,6 +13,7 @@ vector<vector<char>> grid;
 vector<vector<int>> costGrid;
 int sizeX;
 int sizeY;
+bool edgeCost = true;
 
 
 // functions
@@ -37,7 +38,7 @@ int main()
 		costGrid.push_back({});
 		for (int j = 0; j < sizeX; j++)
 		{
-			grid.at(i).push_back('#');
+			grid.at(i).push_back(' ');
 			costGrid.at(i).push_back(RandomNumber(0, 9));
 		}
 	}
@@ -140,32 +141,35 @@ string ShortestPath(vector<int> startPositions, const int endPosition)
 				}
 			}
 
-			
-			if (moveX != 0 && moveY != 0)
+			if (edgeCost)
 			{
-				if (costGrid.at(cPos.at(i).at(0)).at(cPos.at(i).at(1) + moveX) == costGrid.at(cPos.at(i).at(1)).at(cPos.at(i).at(0) + moveY))
+				if (moveX != 0 && moveY != 0)
 				{
-					if (abs(GetX(endPosition) - cPos.at(i).at(0)) < abs(GetY(endPosition) - cPos.at(i).at(1)))
+					if (costGrid.at(cPos.at(i).at(0)).at(cPos.at(i).at(1) + moveX) == costGrid.at(cPos.at(i).at(1)).at(cPos.at(i).at(0) + moveY))
 					{
-						moveX = 0;
+						if (abs(GetX(endPosition) - cPos.at(i).at(0)) < abs(GetY(endPosition) - cPos.at(i).at(1)))
+						{
+							moveX = 0;
+						}
+						else
+						{
+							moveY = 0;
+						}
 					}
 					else
 					{
-						moveY = 0;
-					}
-				}
-				else
-				{
-					if (costGrid.at(cPos.at(i).at(0)).at(cPos.at(i).at(1) + moveX) > costGrid.at(cPos.at(i).at(1)).at(cPos.at(i).at(0) + moveY))
-					{
-						moveX = 0;
-					}
-					else
-					{
-						moveY = 0;
+						if (costGrid.at(cPos.at(i).at(0)).at(cPos.at(i).at(1) + moveX) > costGrid.at(cPos.at(i).at(1)).at(cPos.at(i).at(0) + moveY))
+						{
+							moveX = 0;
+						}
+						else
+						{
+							moveY = 0;
+						}
 					}
 				}
 			}
+			
 			
 			cPos.at(i).at(1) += moveX;
 			cPos.at(i).at(0) += moveY;
